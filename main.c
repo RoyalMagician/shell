@@ -65,7 +65,11 @@ int lsh_cat(char **args)
     int op;
 
     fp = open(args[1], O_RDONLY);
-
+    if(fp == NULL) {
+        printf("%s: No such file in directory");
+        return 1;
+    }
+    
     while (op = read(fp, ch, 99))
     {
 

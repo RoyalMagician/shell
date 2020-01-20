@@ -228,9 +228,9 @@ void lsh_loop(void)
   int status;
 
   do {
-
-    printf("%s@", getlogin();
-    printf("%s ", get_current_dir_name());
+    char dir[1024];
+    printf("%s@", getlogin());
+    printf("%s ", getcwd(dir, sizeof(dir)));
     printf("$ ");
     line = lsh_read_line();
     args = lsh_split_line(line);

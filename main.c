@@ -11,18 +11,21 @@
 int lsh_cd(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
+int lsh_cat(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
  */
 char *builtin_str[] = {
   "cd",
+  "cat",
   "help",
   "exit"
 };
 
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
+  &lsh_cat,
   &lsh_help,
   &lsh_exit
 };
@@ -52,6 +55,26 @@ int lsh_cd(char **args)
   return 1;
 }
 
+int lsh_cat(char **args)
+{
+    int fp;
+    char ch[99];
+    int op;
+
+    fp = open(args[1], O_RDONLY);
+
+    while (op = read(fp, ch, 99))
+    {
+
+        printf("%s", ch);
+    }
+    printf("\n");
+    close(fp);
+
+    return 1;
+}
+
+
 /**
    @brief Builtin command: print help.
    @param args List of args.  Not examined.
@@ -60,7 +83,6 @@ int lsh_cd(char **args)
 int lsh_help(char **args)
 {
   int i;
-  printf("Stephen Brennan's LSH\n");
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are built in:\n");
 
@@ -206,7 +228,7 @@ char **lsh_split_line(char *line)
       tokens_backup = tokens;
       tokens = realloc(tokens, bufsize * sizeof(char*));
       if (!tokens) {
-		free(tokens_backup);
+		    free(tokens_backup);
         fprintf(stderr, "lsh: allocation error\n");
         exit(EXIT_FAILURE);
       }

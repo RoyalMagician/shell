@@ -168,15 +168,13 @@ int lsh_rm(char **args)
     status = remove(args[1]);
     if (status == 0)
     {
-        printf("%s: ", args[1]);
-
-        printf("removed successfully\n");
+        printf("%s removed successfully\n", args[1]);
         return 1;
     }
     else
     {
         printf("%s: ", args[1]);
-        printf("Removed Unsuccessfully\n");
+        printf("Unsuccessful removal of %s\n", args[1]);
         return 1;
     }
 }

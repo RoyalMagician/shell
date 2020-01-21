@@ -159,28 +159,13 @@ int lsh_cp(char **args)
 
 int lsh_rm(char **args)
 {
-    struct dirent *de;  // Pointer for directory entry 
-    DIR *dr;
-    int status;
-    char *argv[2];
-
     if (args[1] == NULL || args[2] != NULL)
     {
         printf("Invalid number of arguments [one expected]!\n");
         return 1;
     }
-  
-    dr = opendir(args[1]);
-    while ((de = readdir(dr)) != NULL) 
-    {
-        argv[0] = "rm";
-        strcpy(argv[1], de->d_name);
-        return lsh_rm(argv); 
-    }        
-    closedir(dr);
-
+    int status;
     status = remove(args[1]);
-    
     if (status == 0)
     {
         printf("%s: ", args[1]);

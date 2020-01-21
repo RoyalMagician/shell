@@ -16,6 +16,7 @@ int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cat(char **args);
 int lsh_cp(char **args);
+int lsh_rm(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -24,6 +25,7 @@ char *builtin_str[] = {
   "cd",
   "cat",
   "cp",
+  "rm",
   "help",
   "exit"
 };
@@ -32,6 +34,7 @@ int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_cat,
   &lsh_cp,
+  &lsh_rm,
   &lsh_help,
   &lsh_exit
 };

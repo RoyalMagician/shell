@@ -166,7 +166,7 @@ int lsh_cp(char **args)
 int lsh_rm(char **args)
 {
     int count = 1;
-    int n = 1
+    int n = 1;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
@@ -178,7 +178,7 @@ int lsh_rm(char **args)
 
     while(count < n)//(sizeof(args)/sizeof(args[0])))
     {
-      if(remove(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
+      if(remove(args[count]) == -1)
       {
         printf("%s could not be removed\n", args[count]);
       }
@@ -217,7 +217,7 @@ int lsh_ls(char **args)
 int lsh_mkdir(char **args)
 {
     int count = 1;
-    int n = 1
+    int n = 1;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");

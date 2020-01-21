@@ -17,6 +17,7 @@ int lsh_exit(char **args);
 int lsh_cat(char **args);
 int lsh_cp(char **args);
 int lsh_rm(char **args);
+int lsh_ls(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.

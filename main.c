@@ -15,6 +15,7 @@ int lsh_cd(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cat(char **args);
+int lsh_cp(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -22,6 +23,7 @@ int lsh_cat(char **args);
 char *builtin_str[] = {
   "cd",
   "cat",
+  "cp",
   "help",
   "exit"
 };
@@ -29,6 +31,7 @@ char *builtin_str[] = {
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_cat,
+  &lsh_cp,
   &lsh_help,
   &lsh_exit
 };
@@ -67,7 +70,7 @@ int lsh_cat(char **args)
 
     fp = open(args[1], O_RDONLY);
     if(fp == -1) {
-        printf("%s: No such file in directory\n", args[1]);
+        printf("%s: Cannot open file\n", args[1]);
         return 1;
     }
 
@@ -100,6 +103,57 @@ int lsh_cat(char **args)
 
     return 1;
 }
+
+#define SIZE 1024
+int lsh_cp(char **args)
+{
+    int Source;
+    int Destination;
+    int ReadBuffer;
+    int WriteBuffer;
+    char *buff[SIZE];
+
+    if (args[1] == NULL || args[2] == NULL || args[3] != NULL)
+    {
+        printf("Invalid number of arguments [two expected]!\n");
+
+        return 1;
+    }
+
+    Source = open(args[1], O_RDONLY);
+
+    if (Source == -1)
+    {
+        printf("%s: Cannot open file\n", args[1], errno);
+        return 1;
+    }
+
+    Destination = open(args[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
+    if (Destination == -1)
+    {
+        printf("%s: Cannot open file\n", args[2], errno);
+        return 1;
+    }
+
+    while ((ReadBuffer = read(Source, buff, SIZE)) > 0)
+    {
+        if (write(Destination, buff, ReadBuffer) != ReadBuffer)
+            printf("\nError in writing data to %s\n", args[2]);
+    }
+    if(nbread == -1)
+    {
+		  printf("\nError in reading data from %s\n",argv[1]);
+    }
+
+    if (close(Source) == -1)
+        printf("\nError in closing file\n");
+
+    if (close(Destination) == -1)
+        printf("\nError in closing file\n");
+    return 1;
+}
+
 
 
 /**

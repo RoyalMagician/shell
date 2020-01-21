@@ -18,6 +18,7 @@ int lsh_cat(char **args);
 int lsh_cp(char **args);
 int lsh_rm(char **args);
 int lsh_ls(char **args);
+int lsh_mkdir(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -28,6 +29,7 @@ char *builtin_str[] = {
   "cp",
   "rm",
   "ls",
+  "mkdir",
   "help",
   "exit"
 };
@@ -38,6 +40,7 @@ int (*builtin_func[]) (char **) = {
   &lsh_cp,
   &lsh_rm,
   &lsh_ls,
+  &lsh_mkdir;
   &lsh_help,
   &lsh_exit
 };
@@ -195,14 +198,39 @@ int lsh_ls(char **args)
         return 0; 
     } 
   
-    // Refer http://pubs.opengroup.org/onlinepubs/7990989775/xsh/readdir.html 
-    // for readdir() 
     while ((de = readdir(dr)) != NULL) 
-            printf("%s\n", de->d_name); 
-  
+    {
+        if(strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0)
+        {
+          printf("%s\n", de->d_name); 
+        }
+          
+    }
     closedir(dr);     
-    return 0; 
+    return 1 ; 
 } 
+
+int lsh_mkdir(char **args)
+{
+    int count = 1;
+    if (args[1] == NULL)
+    {
+        printf("Argument missing!\n");
+        return 1;
+    }
+
+    while(count <= (sizeof(args)/sizeof(char*)))
+    {
+      if(mkdir(args[count]) == -1)
+      {
+        printf("%s could not be created", args[count]);
+      }
+      count += 1;
+    }
+    
+
+    return 1;
+}
 
 
 

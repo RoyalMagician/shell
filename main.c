@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <dirent.h>
 
 /*
   Function Declarations for builtin shell commands:
@@ -124,7 +124,7 @@ int lsh_cp(char **args)
 
     if (Source == -1)
     {
-        printf("%s: Cannot open file\n", args[1], errno);
+        printf("%s: Cannot open file\n", args[1]);
         return 1;
     }
 
@@ -132,7 +132,7 @@ int lsh_cp(char **args)
 
     if (Destination == -1)
     {
-        printf("%s: Cannot open file\n", args[2], errno);
+        printf("%s: Cannot open file\n", args[2]);
         return 1;
     }
 
@@ -141,9 +141,9 @@ int lsh_cp(char **args)
         if (write(Destination, buff, ReadBuffer) != ReadBuffer)
             printf("\nError in writing data to %s\n", args[2]);
     }
-    if(nbread == -1)
+    if(ReadBuffer == -1)
     {
-		  printf("\nError in reading data from %s\n",argv[1]);
+		  printf("\nError in reading data from %s\n",args[1]);
     }
 
     if (close(Source) == -1)
@@ -154,11 +154,6 @@ int lsh_cp(char **args)
     return 1;
 }
 
-/**
-   @brief Bultin command: change directory.
-   @param args List of args.  args[0] is "cd".  args[1] is the directory.
-   @return Always returns 1, to continue executing.
- */
 int lsh_rm(char **args)
 {
     struct dirent *de;  // Pointer for directory entry 

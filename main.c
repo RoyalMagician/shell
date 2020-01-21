@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dirent.h>
+#include <errno.h>
 
 /*
   Function Declarations for builtin shell commands:
@@ -124,7 +124,7 @@ int lsh_cp(char **args)
 
     if (Source == -1)
     {
-        printf("%s: Cannot open file\n", args[1]);
+        printf("%s: Cannot open file\n", args[1], errno);
         return 1;
     }
 
@@ -132,7 +132,7 @@ int lsh_cp(char **args)
 
     if (Destination == -1)
     {
-        printf("%s: Cannot open file\n", args[2]);
+        printf("%s: Cannot open file\n", args[2], errno);
         return 1;
     }
 
@@ -141,9 +141,9 @@ int lsh_cp(char **args)
         if (write(Destination, buff, ReadBuffer) != ReadBuffer)
             printf("\nError in writing data to %s\n", args[2]);
     }
-    if(ReadBuffer == -1)
+    if(nbread == -1)
     {
-		  printf("\nError in reading data from %s\n",args[1]);
+		  printf("\nError in reading data from %s\n",argv[1]);
     }
 
     if (close(Source) == -1)

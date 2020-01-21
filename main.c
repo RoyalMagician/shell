@@ -16,7 +16,6 @@ int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cat(char **args);
 int lsh_cp(char **args);
-int lsh_rm(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -25,7 +24,6 @@ char *builtin_str[] = {
   "cd",
   "cat",
   "cp",
-  "rm",
   "help",
   "exit"
 };
@@ -34,7 +32,6 @@ int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_cat,
   &lsh_cp,
-  &lsh_rm,
   &lsh_help,
   &lsh_exit
 };
@@ -176,15 +173,10 @@ int lsh_rm(char **args)
     }
   
     dr = opendir(args[1]);
-    if (dr == NULL)  
-    { 
-        status = remove(args[1]);
-    } 
-
     while ((de = readdir(dr)) != NULL) 
     {
         argv[0] = "rm";
-        argv[1] = de->d_name;
+        strcpy(argv[1], de->d_name);
         return lsh_rm(argv); 
     }        
     closedir(dr);

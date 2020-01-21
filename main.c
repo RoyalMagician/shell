@@ -213,17 +213,21 @@ int lsh_ls(char **args)
 int lsh_mkdir(char **args)
 {
     int count = 1;
+    int n = 1
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
         return 1;
     }
 
-    while(count <= (sizeof(args)/sizeof(char*)))
+    while( *(++args) )
+        n += strlen(*args);
+
+    while(count <= n)//(sizeof(args)/sizeof(args[0])))
     {
       if(mkdir(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
       {
-        printf("%s could not be created", args[count]);
+        printf("%s could not be created\n", args[count]);
       }
       count += 1;
     }
@@ -410,7 +414,7 @@ void lsh_loop(void)
 
   do {
     char dir[1024];
-    printf("%s@", getlogin());
+    printf("-<%s>@", getlogin());
     printf("%s\n", getcwd(dir, sizeof(dir)));
     printf("$ ");
     line = lsh_read_line();

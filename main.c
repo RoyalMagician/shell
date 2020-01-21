@@ -167,14 +167,15 @@ int lsh_rm(char **args)
 {
     int count = 1;
     int n = 1;
+    char **tmp;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
         return 1;
     }
 
-    while( *(++args) )
-        n += strlen(*args);
+    while( *(++tmp) )
+        n += strlen(*tmp);
 
     while(count < n)//(sizeof(args)/sizeof(args[0])))
     {
@@ -218,14 +219,15 @@ int lsh_mkdir(char **args)
 {
     int count = 1;
     int n = 1;
+    char **tmp;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
         return 1;
     }
 
-    while( *(++args) )
-        n += strlen(*args);
+    while( *(++tmp) )
+        n += strlen(*tmp);
 
     while(count < n)//(sizeof(args)/sizeof(args[0])))
     {

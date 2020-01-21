@@ -165,24 +165,28 @@ int lsh_cp(char **args)
 
 int lsh_rm(char **args)
 {
-    if (args[1] == NULL || args[2] != NULL)
+    int count = 1;
+    int n = 1
+    if (args[1] == NULL)
     {
-        printf("Invalid number of arguments [one expected]!\n");
+        printf("Argument missing!\n");
         return 1;
     }
-    int status;
-    status = remove(args[1]);
-    if (status == 0)
+
+    while( *(++args) )
+        n += strlen(*args);
+
+    while(count < n)//(sizeof(args)/sizeof(args[0])))
     {
-        printf("%s removed successfully\n", args[1]);
-        return 1;
+      if(remove(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
+      {
+        printf("%s could not be removed\n", args[count]);
+      }
+      count += 1;
     }
-    else
-    {
-        printf("%s: ", args[1]);
-        printf("Unsuccessful removal of %s\n", args[1]);
-        return 1;
-    }
+    
+
+    return 1;
 }
 
 int lsh_ls(char **args)
@@ -202,9 +206,9 @@ int lsh_ls(char **args)
     {
         if(strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0)
         {
-          printf("%s\n", de->d_name); 
+          continue;
         }
-          
+        printf("%s\n", de->d_name); 
     }
     closedir(dr);     
     return 1 ; 
@@ -223,7 +227,7 @@ int lsh_mkdir(char **args)
     while( *(++args) )
         n += strlen(*args);
 
-    while(count <= n)//(sizeof(args)/sizeof(args[0])))
+    while(count < n)//(sizeof(args)/sizeof(args[0])))
     {
       if(mkdir(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
       {

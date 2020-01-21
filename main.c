@@ -40,7 +40,7 @@ int (*builtin_func[]) (char **) = {
   &lsh_cp,
   &lsh_rm,
   &lsh_ls,
-  &lsh_mkdir;
+  &lsh_mkdir,
   &lsh_help,
   &lsh_exit
 };
@@ -221,7 +221,7 @@ int lsh_mkdir(char **args)
 
     while(count <= (sizeof(args)/sizeof(char*)))
     {
-      if(mkdir(args[count]) == -1)
+      if(mkdir(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
       {
         printf("%s could not be created", args[count]);
       }

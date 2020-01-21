@@ -61,21 +61,41 @@ int lsh_cd(char **args)
 int lsh_cat(char **args)
 {
     int fp;
+    int fp1;
     char ch[99];
     int op;
 
     fp = open(args[1], O_RDONLY);
-    if(fp == NULL) {
-        printf("%s: No such file in directory");
+    if(fp == -1) {
+        printf("%s: No such file in directory\n", args[1]);
         return 1;
     }
-    
-    while (op = read(fp, ch, 99))
-    {
 
-        printf("%s", ch);
+    if (args[2] != NULL && (strcmp(args[2], ">") == 0))
+    {
+        fp1 = open(args[3], O_WRONLY);
+        if (fp1 == -1)
+        {
+            printf("%s: No such file in directory!\n", args[3]);
+        } 
+        else 
+        {
+            fp1 = open(args[3], O_WRONLY);
+            while (op = read(fp, ch, 99))
+            {
+                write(fp1, ch, op);
+            }
+            close(fp1);
+        }         
     }
-    printf("\n");
+    else 
+    {
+        while (op = read(fp, ch, 99))
+        {
+            write(1, ch, op);
+        }
+    }  
+    
     close(fp);
 
     return 1;
@@ -259,7 +279,7 @@ void lsh_loop(void)
   do {
     char dir[1024];
     printf("%s@", getlogin());
-    printf("%s ", getcwd(dir, sizeof(dir)));
+    printf("%s\n", getcwd(dir, sizeof(dir)));
     printf("$ ");
     line = lsh_read_line();
     args = lsh_split_line(line);

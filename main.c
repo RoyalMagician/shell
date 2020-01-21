@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dirent.h>
+#include <errno.h>
 
 /*
   Function Declarations for builtin shell commands:
@@ -16,7 +16,6 @@ int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cat(char **args);
 int lsh_cp(char **args);
-int lsh_rm(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -25,7 +24,6 @@ char *builtin_str[] = {
   "cd",
   "cat",
   "cp",
-  "rm",
   "help",
   "exit"
 };
@@ -34,7 +32,6 @@ int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_cat,
   &lsh_cp,
-  &lsh_rm,
   &lsh_help,
   &lsh_exit
 };
@@ -127,7 +124,7 @@ int lsh_cp(char **args)
 
     if (Source == -1)
     {
-        printf("%s: Cannot open file\n", args[1]);
+        printf("%s: Cannot open file\n", args[1], errno);
         return 1;
     }
 
@@ -135,7 +132,7 @@ int lsh_cp(char **args)
 
     if (Destination == -1)
     {
-        printf("%s: Cannot open file\n", args[2]);
+        printf("%s: Cannot open file\n", args[2], errno);
         return 1;
     }
 
@@ -144,9 +141,9 @@ int lsh_cp(char **args)
         if (write(Destination, buff, ReadBuffer) != ReadBuffer)
             printf("\nError in writing data to %s\n", args[2]);
     }
-    if(ReadBuffer == -1)
+    if(nbread == -1)
     {
-		  printf("\nError in reading data from %s\n",args[1]);
+		  printf("\nError in reading data from %s\n",argv[1]);
     }
 
     if (close(Source) == -1)
@@ -176,15 +173,10 @@ int lsh_rm(char **args)
     }
   
     dr = opendir(args[1]);
-    if (dr == NULL)  
-    { 
-        status = remove(args[1]);
-    } 
-
     while ((de = readdir(dr)) != NULL) 
     {
         argv[0] = "rm";
-        argv[1] = de->d_name;
+        strcpy(argv[1], de->d_name);
         return lsh_rm(argv); 
     }        
     closedir(dr);

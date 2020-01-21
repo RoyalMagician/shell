@@ -154,6 +154,55 @@ int lsh_cp(char **args)
     return 1;
 }
 
+/**
+   @brief Bultin command: change directory.
+   @param args List of args.  args[0] is "cd".  args[1] is the directory.
+   @return Always returns 1, to continue executing.
+ */
+int lsh_rm(char **args)
+{
+    struct dirent *de;  // Pointer for directory entry 
+    DIR *dr;
+    int status;
+    char *argv[2];
+
+    if (args[1] == NULL || args[2] != NULL)
+    {
+        printf("Invalid number of arguments [one expected]!\n");
+        return 1;
+    }
+  
+    dr = opendir(args[1]);
+    if (dr == NULL)  
+    { 
+        status = remove(args[1]);
+    } 
+
+    while ((de = readdir(dr)) != NULL) 
+    {
+        argv[0] = "rm";
+        argv[1] = de->d_name;
+        return lsh_rm(argv); 
+    }        
+    closedir(dr);
+
+    status = remove(args[1]);
+    
+    if (status == 0)
+    {
+        printf("%s: ", args[1]);
+
+        printf("removed successfully\n");
+        return 1;
+    }
+    else
+    {
+        printf("%s: ", args[1]);
+        printf("Removed Unsuccessfully\n");
+        return 1;
+    }
+}
+
 
 
 /**

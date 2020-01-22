@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <ftw.h>
 
 /*
   Function Declarations for builtin shell commands:
@@ -246,32 +247,42 @@ int lsh_mkdir(char **args)
 
 int lsh_rmdir(char **args)
 {
-    struct dirent *de;  
-    int status;
-    char *arg[2];
 
-    DIR *dr = opendir(args[1]); 
+    ftw(args[1], delete, 1);
+    return 1;
 
-    if (dr == NULL) 
-    { 
-        status = remove(args[1]);
-        if (status != -1)
-        {
-          printf("%s could not be removed", args[1]);
-        } 
-        return 1; 
-    } 
+    // struct dirent *de;  
+    // int status;
+    // char **arg;
 
-    while ((de = readdir(dr)) != NULL) 
-    {
-      *arg[0] = NULL;
-      *arg[1] = de->d_name;
-      return lsh_rmdir(arg);
-    }
-    closedir(dr);  
-    remove(args[1]); 
+    // DIR *dr = opendir(args[1]); 
+
+    // if (dr == NULL) 
+    // { 
+    //     status = remove(args[1]);
+    //     if (status != -1)
+    //     {
+    //       printf("%s could not be removed", args[1]);
+    //     } 
+    //     return 1; 
+    // } 
+
+    // while ((de = readdir(dr)) != NULL) 
+    // {
+    //   *arg[0] = NULL;
+    //   *arg[1] = de->d_name;
+    //   return lsh_rmdir(arg);
+    // }
+    // closedir(dr);  
+    // remove(args[1]); 
     return 1 ; 
 } 
+int delete(const char *name, const struct stat *status, int type) {
+  if(type != FTW_D) {
+    remove(name);
+  }
+  return 0;
+}
 
 
 

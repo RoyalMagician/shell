@@ -21,6 +21,7 @@ int lsh_rm(char **args);
 int lsh_ls(char **args);
 int lsh_mkdir(char **args);
 int lsh_rmdir(char **args);
+int delete(const char *name, const struct stat *status, int type);
 
 /*
   List of builtin commands, followed by their corresponding functions.

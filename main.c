@@ -167,7 +167,7 @@ int lsh_rm(char **args)
 {
     int count = 1;
     int n = 1;
-    char **tmp;
+    char **tmp = args;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
@@ -177,7 +177,7 @@ int lsh_rm(char **args)
     while( *(++tmp) )
         n += strlen(*tmp);
 
-    while(count < n)//(sizeof(args)/sizeof(args[0])))
+    while(count < n)
     {
       if(remove(args[count]) == -1)
       {
@@ -192,24 +192,23 @@ int lsh_rm(char **args)
 
 int lsh_ls(char **args)
 {
-  struct dirent *de;  // Pointer for directory entry 
-  
-    // opendir() returns a pointer of DIR type.  
+    struct dirent *de;  
+
     DIR *dr = opendir("."); 
-  
-    if (dr == NULL)  // opendir returns NULL if couldn't open directory 
+
+    if (dr == NULL) 
     { 
         printf("Could not open current directory" ); 
         return 0; 
     } 
-  
+
     while ((de = readdir(dr)) != NULL) 
     {
         if(strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0)
         {
           continue;
         }
-        printf("%s\n", de->d_name); 
+        printf("--%s\n", de->d_name); 
     }
     closedir(dr);     
     return 1 ; 
@@ -219,7 +218,7 @@ int lsh_mkdir(char **args)
 {
     int count = 1;
     int n = 1;
-    char **tmp;
+    char **tmp = args;
     if (args[1] == NULL)
     {
         printf("Argument missing!\n");
@@ -229,7 +228,7 @@ int lsh_mkdir(char **args)
     while( *(++tmp) )
         n += strlen(*tmp);
 
-    while(count < n)//(sizeof(args)/sizeof(args[0])))
+    while(count < n)
     {
       if(mkdir(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
       {

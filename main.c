@@ -19,6 +19,7 @@ int lsh_cp(char **args);
 int lsh_rm(char **args);
 int lsh_ls(char **args);
 int lsh_mkdir(char **args);
+int lsh_rmdir(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -30,6 +31,7 @@ char *builtin_str[] = {
   "rm",
   "ls",
   "mkdir",
+  "rmdir",
   "help",
   "exit"
 };
@@ -41,6 +43,7 @@ int (*builtin_func[]) (char **) = {
   &lsh_rm,
   &lsh_ls,
   &lsh_mkdir,
+  &lsh_rmdir,
   &lsh_help,
   &lsh_exit
 };
@@ -245,6 +248,7 @@ int lsh_rmdir(char **args)
 {
     struct dirent *de;  
     int status;
+    char *arg[2];
 
     DIR *dr = opendir(args[1]); 
 
@@ -260,10 +264,12 @@ int lsh_rmdir(char **args)
 
     while ((de = readdir(dr)) != NULL) 
     {
-      return lsh_rmdir();
+      *arg[0] = NULL;
+      *arg[1] = de->d_name;
+      return lsh_rmdir(arg);
     }
     closedir(dr);  
-    remove(args[1])   
+    remove(args[1]); 
     return 1 ; 
 } 
 

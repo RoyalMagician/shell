@@ -248,16 +248,28 @@ int lsh_mkdir(char **args)
 
 int lsh_rmdir(char **args)
 {
-    if(args[1] == NULL)
+    int count = 1;
+    int n = 1;
+    char **tmp = args;
+    if (args[1] == NULL)
     {
-      printf("Expected 1 argument!\n");
+        printf("Argument missing!\n");
+        return 1;
     }
 
-    ftw(args[1], delete, 1);
-    if(remove(args[1]) == -1)
+    while( *(++tmp) )
+        n += 1;
+
+    while(count < n)
     {
-      printf("%s could not be removed\n", args[1]);
+      ftw(args[count], delete, 1);
+      count += 1;
     }
+    if(remove(args[count]) == -1)
+    {
+      printf("%s could not be removed\n", args[count]);
+    }
+    
     return 1;
 } 
 int delete(const char *name, const struct stat *status, int type) {

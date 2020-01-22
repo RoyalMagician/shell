@@ -180,7 +180,7 @@ int lsh_rm(char **args)
     }
 
     while( *(++tmp) )
-        n += strlen(*tmp);
+        n += 1;
 
     while(count < n)
     {
@@ -231,7 +231,7 @@ int lsh_mkdir(char **args)
     }
 
     while( *(++tmp) )
-        n += strlen(*tmp);
+        n += 1;
 
     while(count < n)
     {
@@ -248,6 +248,10 @@ int lsh_mkdir(char **args)
 
 int lsh_rmdir(char **args)
 {
+    if(args[1] == NULL)
+    {
+      printf("Expected 1 argument!\n");
+    }
 
     ftw(args[1], delete, 1);
     if(remove(args[1]) == -1)
@@ -257,7 +261,7 @@ int lsh_rmdir(char **args)
     return 1;
 } 
 int delete(const char *name, const struct stat *status, int type) {
-  if(type != FTW_D) {
+  if(type != FTS_D) {
     if(remove(name) == -1)
     {
       printf("%s could not be removed\n", name);

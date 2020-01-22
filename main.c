@@ -252,23 +252,23 @@ int lsh_rmdir(char **args)
     ftw(args[1], delete, 1);
     if(remove(args[1]) == -1)
     {
-<<<<<<< HEAD
       printf("%s could not be removed\n", args[1]);
-=======
-      printf("%s could not be removed\n", name);
->>>>>>> 9be7f7c144fd112cfe77a6918e7e5e87607ecd84
     }
     return 1;
 } 
 int delete(const char *name, const struct stat *status, int type) {
+  if(type != FTW_D) {
+    if(remove(name) == -1)
+    {
+      printf("%s could not be removed\n", name);
+    }
+  }
   if(remove(name) == -1)
   {
     printf("%s could not be removed\n", name);
   }
   return 0;
 }
-
-
 
 /**
    @brief Builtin command: print help.

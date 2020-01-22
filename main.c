@@ -263,11 +263,11 @@ int lsh_rmdir(char **args)
     while(count < n)
     {
       ftw(args[count], delete, 1);
+      if(remove(args[count]) == -1)
+      {
+        printf("%s could not be removed\n", args[count]);
+      }
       count += 1;
-    }
-    if(remove(args[count]) == -1)
-    {
-      printf("%s could not be removed\n", args[count]);
     }
     
     return 1;

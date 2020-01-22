@@ -261,16 +261,12 @@ int lsh_rmdir(char **args)
     return 1;
 } 
 int delete(const char *name, const struct stat *status, int type) {
-  if(type != FTS_D) {
-    if(remove(name) == -1)
-    {
-      printf("%s could not be removed\n", name);
-    }
-  }
-  if(remove(name) == -1)
+  if(type != FTW_D) 
   {
-    printf("%s could not be removed\n", name);
+    remove(name) == -1;
   }
+  remove(name) == -1;
+
   return 0;
 }
 

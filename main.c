@@ -252,7 +252,11 @@ int lsh_rmdir(char **args)
     ftw(args[1], delete, 1);
     if(remove(args[1]) == -1)
     {
+<<<<<<< HEAD
       printf("%s could not be removed\n", args[1]);
+=======
+      printf("%s could not be removed\n", name);
+>>>>>>> 9be7f7c144fd112cfe77a6918e7e5e87607ecd84
     }
     return 1;
 } 

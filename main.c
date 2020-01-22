@@ -66,10 +66,10 @@ int lsh_num_builtins() {
 int lsh_cd(char **args)
 {
   if (args[1] == NULL) {
-    fprintf(stderr, "lsh: expected argument to \"cd\"\n");
+    fprintf(stderr, "  lsh: expected argument to \"cd\"\n");
   } else {
     if (chdir(args[1]) != 0) {
-      perror("lsh");
+      perror("  lsh");
     }
   }
   return 1;
@@ -84,7 +84,7 @@ int lsh_cat(char **args)
 
     fp = open(args[1], O_RDONLY);
     if(fp == -1) {
-        printf("%s: Cannot open file\n", args[1]);
+        printf("  %s: Cannot open file\n", args[1]);
         return 1;
     }
 
@@ -93,7 +93,7 @@ int lsh_cat(char **args)
         fp1 = open(args[3], O_WRONLY);
         if (fp1 == -1)
         {
-            printf("%s: No such file in directory!\n", args[3]);
+            printf("  %s: No such file in directory!\n", args[3]);
         } 
         else 
         {
@@ -129,7 +129,7 @@ int lsh_cp(char **args)
 
     if (args[1] == NULL || args[2] == NULL || args[3] != NULL)
     {
-        printf("Invalid number of arguments [two expected]!\n");
+        printf("  Invalid number of arguments [two expected]!\n");
 
         return 1;
     }
@@ -138,7 +138,7 @@ int lsh_cp(char **args)
 
     if (Source == -1)
     {
-        printf("%s: Cannot open file\n", args[1]);
+        printf("  %s: Cannot open file\n", args[1]);
         return 1;
     }
 
@@ -146,25 +146,25 @@ int lsh_cp(char **args)
 
     if (Destination == -1)
     {
-        printf("%s: Cannot open file\n", args[2]);
+        printf("  %s: Cannot open file\n", args[2]);
         return 1;
     }
 
     while ((ReadBuffer = read(Source, buff, SIZE)) > 0)
     {
         if (write(Destination, buff, ReadBuffer) != ReadBuffer)
-            printf("\nError in writing data to %s\n", args[2]);
+            printf("\n  Error in writing data to %s\n", args[2]);
     }
     if(ReadBuffer == -1)
     {
-		  printf("\nError in reading data from %s\n",args[1]);
+		  printf("\n  Error in reading data from %s\n",args[1]);
     }
 
     if (close(Source) == -1)
-        printf("\nError in closing file\n");
+        printf("\n  Error in closing file\n");
 
     if (close(Destination) == -1)
-        printf("\nError in closing file\n");
+        printf("\n  Error in closing file\n");
     return 1;
 }
 
@@ -175,7 +175,7 @@ int lsh_rm(char **args)
     char **tmp = args;
     if (args[1] == NULL)
     {
-        printf("Argument missing!\n");
+        printf("  Argument missing!\n");
         return 1;
     }
 
@@ -186,7 +186,7 @@ int lsh_rm(char **args)
     {
       if(remove(args[count]) == -1)
       {
-        printf("%s could not be removed\n", args[count]);
+        printf("  %s could not be removed\n", args[count]);
       }
       count += 1;
     }
@@ -203,7 +203,7 @@ int lsh_ls(char **args)
 
     if (dr == NULL) 
     { 
-        printf("Could not open current directory" ); 
+        printf("  Could not open current directory\n" ); 
         return 0; 
     } 
 
@@ -213,8 +213,9 @@ int lsh_ls(char **args)
         {
           continue;
         }
-        printf("--%s\n", de->d_name); 
+        printf("  %s  ", de->d_name); 
     }
+    printf("\n");
     closedir(dr);     
     return 1 ; 
 } 
@@ -226,7 +227,7 @@ int lsh_mkdir(char **args)
     char **tmp = args;
     if (args[1] == NULL)
     {
-        printf("Argument missing!\n");
+        printf("  Argument missing!\n");
         return 1;
     }
 
@@ -237,7 +238,7 @@ int lsh_mkdir(char **args)
     {
       if(mkdir(args[count], S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
       {
-        printf("%s could not be created\n", args[count]);
+        printf("  %s could not be created\n", args[count]);
       }
       count += 1;
     }
@@ -253,7 +254,7 @@ int lsh_rmdir(char **args)
     char **tmp = args;
     if (args[1] == NULL)
     {
-        printf("Argument missing!\n");
+        printf("  Argument missing!\n");
         return 1;
     }
 
@@ -265,7 +266,7 @@ int lsh_rmdir(char **args)
       ftw(args[count], delete, 1);
       if(remove(args[count]) == -1)
       {
-        printf("%s could not be removed\n", args[count]);
+        printf("  %s could not be removed\n", args[count]);
       }
       count += 1;
     }
@@ -290,14 +291,16 @@ int delete(const char *name, const struct stat *status, int type) {
 int lsh_help(char **args)
 {
   int i;
+  printf("\n");
+  printf("************************************************\n");
   printf("Type program names and arguments, and hit enter.\n");
-  printf("The following are built in:\n");
+  printf("The following are built in:\n\n");
 
   for (i = 0; i < lsh_num_builtins(); i++) {
-    printf("  %s\n", builtin_str[i]);
+    printf(" > %s\n", builtin_str[i]);
   }
 
-  printf("Use the man command for information on other programs.\n");
+  printf("Use the man command for information on other programs.\n\n");
   return 1;
 }
 

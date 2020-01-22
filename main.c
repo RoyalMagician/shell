@@ -250,37 +250,16 @@ int lsh_rmdir(char **args)
 {
 
     ftw(args[1], delete, 1);
+    if(remove(args[1]) == -1)
+    {
+      printf("%s could not be removed\n", args[count]);
+    }
     return 1;
-
-    // struct dirent *de;  
-    // int status;
-    // char **arg;
-
-    // DIR *dr = opendir(args[1]); 
-
-    // if (dr == NULL) 
-    // { 
-    //     status = remove(args[1]);
-    //     if (status != -1)
-    //     {
-    //       printf("%s could not be removed", args[1]);
-    //     } 
-    //     return 1; 
-    // } 
-
-    // while ((de = readdir(dr)) != NULL) 
-    // {
-    //   *arg[0] = NULL;
-    //   *arg[1] = de->d_name;
-    //   return lsh_rmdir(arg);
-    // }
-    // closedir(dr);  
-    // remove(args[1]); 
-    return 1 ; 
 } 
 int delete(const char *name, const struct stat *status, int type) {
-  if(type != FTW_D) {
-    remove(name);
+  if(remove(name) == -1)
+  {
+    printf("%s could not be removed\n", args[count]);
   }
   return 0;
 }

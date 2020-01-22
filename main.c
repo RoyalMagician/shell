@@ -241,6 +241,32 @@ int lsh_mkdir(char **args)
     return 1;
 }
 
+int lsh_rmdir(char **args)
+{
+    struct dirent *de;  
+    int status;
+
+    DIR *dr = opendir(args[1]); 
+
+    if (dr == NULL) 
+    { 
+        status = remove(args[1]);
+        if (status != -1)
+        {
+          printf("%s could not be removed", args[1]);
+        } 
+        return 1; 
+    } 
+
+    while ((de = readdir(dr)) != NULL) 
+    {
+      return lsh_rmdir();
+    }
+    closedir(dr);  
+    remove(args[1])   
+    return 1 ; 
+} 
+
 
 
 /**
